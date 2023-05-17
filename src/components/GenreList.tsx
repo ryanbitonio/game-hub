@@ -1,14 +1,22 @@
 import { HStack, Image, List, ListItem, Spinner, Text } from "@chakra-ui/react";
 import useGenres from "../hooks/useGenres";
 import getCroppedImageUrl from "../services/image-url";
+import GenreListSkeleton from "./GenreListSkeleton";
 
 const GenreList = () => {
   const { data, isLoading, error } = useGenres();
+  const skeletons = [...Array(19).keys()].map(i => i + 1);
 
   if (error) return null;
-  if (isLoading) return <Spinner />;
+
   return (
     <List>
+      {isLoading &&
+        skeletons.map(skeleton => (
+          <ListItem key={skeleton} paddingY="5px">
+            <GenreListSkeleton />
+          </ListItem>
+        ))}
       {data.map(genre => (
         <ListItem key={genre.id} paddingY="5px">
           <HStack>
